@@ -34,17 +34,17 @@ import { Input } from "@/components/ui/input";
 
 //Form Schema
 const formSchema = z.object({
-  nameDish: z.string()
+  nombre: z.string()
     .min(4, { message: "Debe de contener mínimo 4 caracteres" })
     .max(20, { message: "Longitud excedida" }),
-  descriptionDish: z
+  descripcion: z
     .string()
     .min(8, { message: "Debe de contener mínimo 8 caracteres" })
     .max(30, { message: "Longitud excedida" }),
   //dame otra opcion para el scheme del precio
-  precio: z.string()
+  precio_unitario: z.string()
   .transform(Number),
-  image: z.string().url({ message: "La imagen debe ser una URL" }),
+  //image: z.string().url({ message: "La imagen debe ser una URL" }),
 });
 
 function AddDishes() {
@@ -55,16 +55,15 @@ function AddDishes() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      nameDish: "",
-      descriptionDish: "",
-      precio: '',
-      image: "",
+      nombre: "",
+      descripcion: ""
     },
   });
 
   //Se crea el submit para mandar los datos del formulario a la base de datos de supabase
   function onSubmit (data: z.infer<typeof formSchema>) {
     setError("");
+    console.log('Datos a mandar:', data);
     startTransition(() => {
       createDish(data);
     });
@@ -84,7 +83,7 @@ function AddDishes() {
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
                 control={form.control}
-                name="nameDish"
+                name="nombre"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Nombre del platillo:</FormLabel>
@@ -97,7 +96,7 @@ function AddDishes() {
               />
               <FormField
                 control={form.control}
-                name="descriptionDish"
+                name="descripcion"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Descripción del platillo:</FormLabel>
@@ -110,7 +109,7 @@ function AddDishes() {
               />
               <FormField
                 control={form.control}
-                name="precio"
+                name="precio_unitario"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Precio:</FormLabel>
@@ -123,7 +122,7 @@ function AddDishes() {
               />
               <FormField
                 control={form.control}
-                name="image"
+                name="images"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>URL de la imagen:</FormLabel>
